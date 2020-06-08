@@ -1,17 +1,13 @@
 import functools
+from .exceptions import ConditionNotMet, InvalidStartState
 
 
-class TransitionNotAllowed(Exception):
-    pass
-
-
-class InvalidStartState(TransitionNotAllowed):
-    pass
-
-
-class ConditionNotMet(TransitionNotAllowed):
-    def __init__(self, condition):
-        self.condition = condition
+class StateMachine:
+    def __init__(self):
+        try:
+            self.state
+        except AttributeError:
+            raise ValueError("Need to set a state instance variable")
 
 
 def transition(source, target, conditions=None):
@@ -48,19 +44,3 @@ def transition(source, target, conditions=None):
         return _wrapper
 
     return transition_decorator
-
-
-class Turnstile:
-    STATES = [("open"), ("close")]
-    initial_state = "close"
-
-    def __init__(self):
-        self.state = self.initial_state
-
-    @transition(source=["close", "open"], target="open")
-    def insert_coin(self):
-        self.state = "open"
-
-    @transition(source="open", target="close")
-    def pass_thru(self):
-        self.state = "close"
