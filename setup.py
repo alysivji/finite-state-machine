@@ -36,7 +36,7 @@ setup(
     version=find_version("finite_state_machine", "__version__.py"),
     author="Aly Sivji",
     author_email="alysivji@gmail.com",
-    description="Lightweight, decorator-based implementation of a Finite State Machine.",
+    description="Lightweight, decorator-based implementation of a Finite State Machine",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/alysivji/finite-state-machine",
