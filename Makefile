@@ -5,7 +5,7 @@ test:
 	pytest
 
 test-cov:
-	pytest --cov simple_state_machine/ --cov examples/
+	pytest --cov finite_state_machine/ --cov examples/
 
 test-covhtml:
-	pytest --cov simple_state_machine/ --cov examples/ --cov-report html && open ./htmlcov/index.html
+	pytest --cov finite_state_machine/ --cov examples/ --cov-report html && open ./htmlcov/index.html

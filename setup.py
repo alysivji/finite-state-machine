@@ -32,14 +32,14 @@ def read(*parts):
 # Build
 #######
 setup(
-    name="simple-state-machine",
-    version=find_version("simple_state_machine", "__version__.py"),
+    name="finite-state-machine",
+    version=find_version("finite_state_machine", "__version__.py"),
     author="Aly Sivji",
     author_email="alysivji@gmail.com",
     description="Lightweight, decorator-based implementation of a Finite State Machine.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/alysivji/simple-state-machine",
+    url="https://github.com/alysivji/finite-state-machine",
     classifiers=[
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",

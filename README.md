@@ -1,16 +1,14 @@
-# Simple State Machine
+# Finite State Machine
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Lightweight, decorator-based Python implementation of a [Finite State Machine](https://en.wikipedia.org/wiki/Finite-state_machine).
 
-<!-- TOC -->
+## Installation
 
-- [Usage](#usage)
-- [Example](#example)
-- [Inspiration](#inspiration)
-
-<!-- /TOC -->
+```console
+pip install [name]
+```
 
 ## Usage
 
@@ -21,7 +19,7 @@ The `transition` decorator can be used to specify valid transitions.
 ## Example
 
 ```python
-from simple_state_machine import StateMachine, transition
+from finite_state_machine import StateMachine, transition
 
 class Turnstile(StateMachine):
     initial_state = "close"

@@ -1,6 +1,6 @@
 import pytest
 
-from simple_state_machine.exceptions import InvalidStartState
+from finite_state_machine.exceptions import InvalidStartState
 from examples.turnstile import Turnstile
 
 

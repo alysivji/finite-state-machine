@@ -1,4 +1,4 @@
-from simple_state_machine import StateMachine
+from finite_state_machine import StateMachine
 import pytest
 
 
