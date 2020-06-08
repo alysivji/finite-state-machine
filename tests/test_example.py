@@ -1,6 +1,5 @@
 import pytest
-
-from finite_state_machine.example import Turnstile
+from finite_state_machine.example import Turnstile, InvalidStartState
 
 
 def test_turnstile():
@@ -26,5 +25,5 @@ def test_turnstile__cannot_pass_thru_closed_turnstile():
     assert t.state == "close"
     assert not t.coin_inserted
 
-    with pytest.raises(ValueError):
+    with pytest.raises(InvalidStartState):
         t.pass_thru()
