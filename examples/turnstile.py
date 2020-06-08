@@ -1,4 +1,4 @@
-from finite_state_machine import StateMachine, transition
+from simple_state_machine import StateMachine, transition
 
 
 class Turnstile(StateMachine):

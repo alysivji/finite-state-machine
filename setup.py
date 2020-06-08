@@ -16,8 +16,7 @@ with open("requirements.txt") as f:
 
 def find_version(*file_paths):
     version_file = read(*file_paths)
-    version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]",
-                              version_file, re.M)
+    version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]", version_file, re.M)
     if version_match:
         return version_match.group(1)
     raise RuntimeError("Unable to find version string.")
@@ -33,18 +32,14 @@ def read(*parts):
 # Build
 #######
 setup(
-    name="finite-state-machine",
-    version=find_version("finite_state_machine", "__version__.py"),
-
+    name="simple-state-machine",
+    version=find_version("simple_state_machine", "__version__.py"),
     author="Aly Sivji",
     author_email="alysivji@gmail.com",
-
-    description="Implementation of a Finite State Machine with a decorator-based API.",
+    description="Lightweight, decorator-based implementation of a Finite State Machine.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-
-    url="https://github.com/alysivji/finite-state-machine",
-
+    url="https://github.com/alysivji/simple-state-machine",
     classifiers=[
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
@@ -52,12 +47,11 @@ setup(
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
     ],
-    keywords="",
-
+    keywords="finite-state-machine finite-automata state-machine",
     install_requires=dependencies,
-    packages=find_packages(exclude=["tests", ]),
+    packages=find_packages(exclude=["tests"]),
     test_suite="tests",
-
     zip_safe=False,
 )
