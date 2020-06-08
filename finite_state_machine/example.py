@@ -1,22 +1,17 @@
 import functools
 
 
-class InvalidStartState(Exception):
+class TransitionNotAllowed(Exception):
     pass
 
 
-class ConditionNotMet(Exception):
+class InvalidStartState(TransitionNotAllowed):
+    pass
+
+
+class ConditionNotMet(TransitionNotAllowed):
     def __init__(self, condition):
         self.condition = condition
-
-
-class StateMachine:
-    def __init__(self):
-        pass
-
-
-def _contains_coin(instance):
-    return instance.coin_inserted
 
 
 def transition(source, target, conditions=None):
@@ -61,14 +56,11 @@ class Turnstile:
 
     def __init__(self):
         self.state = self.initial_state
-        self.coin_inserted = False
 
     @transition(source=["close", "open"], target="open")
     def insert_coin(self):
-        self.coin_inserted = True
         self.state = "open"
 
-    @transition(source="open", target="close", conditions=[_contains_coin])
+    @transition(source="open", target="close")
     def pass_thru(self):
-        self.coin_inserted = False
         self.state = "close"
