@@ -94,7 +94,16 @@ pytest
 
 ## Release
 
-Use SemVer for versioning strategy. Use [flit](https://github.com/takluyver/flit) to manage PyPI lifecycle.
+Use SemVer for versioning strategy
+
+### Instructions
+
+1. Grab last version, `X.Y.Z`
+1. Generate changelog: `python scripts/generate_changelog.py -v X.Y.Z`
+1. Cut a release on GitHub
+1. Upload to PyPI with [flit](https://github.com/takluyver/flit)
+
+### Flit Workflow
 
 ```console
 pip install flit
