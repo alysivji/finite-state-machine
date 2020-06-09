@@ -1,4 +1,4 @@
-"""Lightweight, decorator-based Python implementation of a Finite State Machine"""
+"""Lightweight, decorator-based implementation of a Finite State Machine"""
 
 __version__ = "0.1.1"
 
