@@ -9,7 +9,7 @@ Lightweight, decorator-based Python implementation of a [Finite State Machine](h
 ## Installation
 
 ```console
-pip install [name]
+pip install finite-state-machine
 ```
 
 ## Usage
