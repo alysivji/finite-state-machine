@@ -77,6 +77,30 @@ InvalidStartState                         Traceback (most recent call last)
 InvalidStartState:
 ```
 
+## Contributing
+
+1. Clone repo
+1. Create a virtual environment
+1. `pip install -r requirements_dev.txt`
+1. Install [pre-commit](https://pre-commit.com/)
+1. Set up pre-commit hooks in repo: `pre-commit install`
+
+### Running Tests
+
+```console
+pytest
+```
+
+## Release
+
+Use SemVer for versioning strategy. Use [flit](https://github.com/takluyver/flit) to manage PyPI lifecycle.
+
+```console
+pip install flit
+flit build --format sdist
+flit publish --repository testpypi
+```
+
 ## Inspiration
 
 This project is inspired by [django-fsm](https://github.com/viewflow/django-fsm/). Wanted a decorator-based state machine without having to use Django.
