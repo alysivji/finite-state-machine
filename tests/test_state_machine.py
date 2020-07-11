@@ -1,4 +1,4 @@
-from finite_state_machine import StateMachine
+from finite_state_machine import StateMachine, transition
 import pytest
 
 
@@ -12,3 +12,27 @@ def test_state_machine():
 
     with pytest.raises(ValueError):
         LightSwitch()
+
+
+def test_source_parameter_is_tuple():
+    with pytest.raises(ValueError):
+
+        @transition(source=("here",), target="there")
+        def conditions_check(instance):
+            pass
+
+
+def test_target_parameter_is_tuple():
+    with pytest.raises(ValueError):
+
+        @transition(source="here", target=("there",))
+        def conditions_check(instance):
+            pass
+
+
+def test_conditions_parameter_is_tuple():
+    with pytest.raises(ValueError):
+
+        @transition(source="here", target="there", conditions=(1, 2))
+        def conditions_check(instance):
+            pass
