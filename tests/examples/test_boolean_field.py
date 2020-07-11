@@ -1,7 +1,4 @@
-try:
-    from types import SimpleNamespace
-except ImportError:
-    from argparse import Namespace as SimpleNamespace
+from types import SimpleNamespace
 
 import pytest
 
