@@ -18,6 +18,8 @@ You will need to subclass `StateMachine` and set the `state` instance variable.
 
 The `transition` decorator can be used to specify valid transitions.
 
+See [examples](/examples) for sample State Machine workflows.
+
 ## Example
 
 ```python
