@@ -13,9 +13,7 @@ class EnableFeatureStateMachine(StateMachine):
         self.state = account.feature["enabled"]
         super().__init__()
 
-    @transition(
-        source=[True, False], target=True, conditions=[account_in_good_standing]
-    )
+    @transition(source=False, target=True, conditions=[account_in_good_standing])
     def enable_feature(self):
         pass
 
