@@ -28,6 +28,7 @@ class Turnstile(StateMachine):
 
     def __init__(self):
         self.state = self.initial_state
+        super().__init__()
 
     @transition(source=["close", "open"], target="open")
     def insert_coin(self):
