@@ -11,12 +11,16 @@ class StateMachine:
 
 
 def transition(source, target, conditions=None):
-    if isinstance(source, str):
+    allowed_types = [str, bool, int]
+
+    if type(source) in allowed_types:
         source = [source]
     if not isinstance(source, list):
-        raise ValueError("Source can be a string or list")
-    if not isinstance(target, str):
-        raise ValueError("Target needs to be a string")
+        raise ValueError("Source can be a bool, int, string or list")
+
+    if type(target) not in allowed_types:
+        raise ValueError("Target needs to be a bool, int or string")
+
     if not conditions:
         conditions = []
     if not isinstance(conditions, list):
