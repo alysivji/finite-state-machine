@@ -36,3 +36,35 @@ def test_conditions_parameter_is_tuple():
         @transition(source="here", target="there", conditions=(1, 2))
         def conditions_check(instance):
             pass
+
+
+class TestExceptionStateHandling:
+    def test_on_exception_parameter_is_invalid(self):
+        with pytest.raises(ValueError, match="on_exception needs to be"):
+
+            @transition(source="here", target="there", on_exception=(1, 2))
+            def state_transition(instance):
+                pass
+
+    def test_state_machine_goes_into_exception_state_when_exception_occurs(self):
+        class LightSwitch(StateMachine):
+            def __init__(self):
+                self.state = "off"
+
+            @transition(source="off", target="on", on_exception="failed")
+            def turn_on(self):
+                raise ValueError
+
+            @transition(source="on", target="off")
+            def turn_off(self):
+                pass
+
+        # Arrange
+        switch = LightSwitch()
+        assert switch.state == "off"
+
+        # Act
+        switch.turn_on()
+
+        # Act
+        assert switch.state == "failed"
