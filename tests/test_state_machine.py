@@ -2,7 +2,7 @@ from finite_state_machine import StateMachine, transition
 import pytest
 
 
-def test_state_machine():
+def test_state_machine_requires_state_instance_variable():
     class LightSwitch(StateMachine):
         def turn_on(self):
             pass
@@ -10,7 +10,7 @@ def test_state_machine():
         def turn_off(self):
             pass
 
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="Need to set a state instance variable"):
         LightSwitch()
 
 
