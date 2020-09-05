@@ -15,7 +15,7 @@ def test_state_machine_requires_state_instance_variable():
 
 
 def test_source_parameter_is_tuple():
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="Source can be a"):
 
         @transition(source=("here",), target="there")
         def conditions_check(instance):
@@ -23,7 +23,7 @@ def test_source_parameter_is_tuple():
 
 
 def test_target_parameter_is_tuple():
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="Target needs to be a"):
 
         @transition(source="here", target=("there",))
         def conditions_check(instance):
@@ -31,7 +31,7 @@ def test_target_parameter_is_tuple():
 
 
 def test_conditions_parameter_is_tuple():
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="Conditions needs to be a list"):
 
         @transition(source="here", target="there", conditions=(1, 2))
         def conditions_check(instance):
