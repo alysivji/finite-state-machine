@@ -10,7 +10,7 @@ class StateMachine:
             raise ValueError("Need to set a state instance variable")
 
 
-def transition(source, target, conditions=None, on_exception=None):
+def transition(source, target, conditions=None, on_error=None):
     allowed_types = [str, bool, int]
 
     if type(source) in allowed_types:
@@ -26,9 +26,9 @@ def transition(source, target, conditions=None, on_exception=None):
     if not isinstance(conditions, list):
         raise ValueError("Conditions needs to be a list")
 
-    if on_exception:
-        if type(on_exception) not in allowed_types:
-            raise ValueError("on_exception needs to be a bool, int or string")
+    if on_error:
+        if type(on_error) not in allowed_types:
+            raise ValueError("on_error needs to be a bool, int or string")
 
     def transition_decorator(func):
         @functools.wraps(func)
@@ -50,7 +50,7 @@ def transition(source, target, conditions=None, on_exception=None):
                 self.state = target
                 return result
             except Exception:
-                self.state = on_exception
+                self.state = on_error
 
         return _wrapper
 

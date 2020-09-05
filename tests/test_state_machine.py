@@ -39,10 +39,10 @@ def test_conditions_parameter_is_tuple():
 
 
 class TestExceptionStateHandling:
-    def test_on_exception_parameter_is_invalid(self):
-        with pytest.raises(ValueError, match="on_exception needs to be"):
+    def test_on_error_parameter_is_invalid(self):
+        with pytest.raises(ValueError, match="on_error needs to be"):
 
-            @transition(source="here", target="there", on_exception=(1, 2))
+            @transition(source="here", target="there", on_error=(1, 2))
             def state_transition(instance):
                 pass
 
@@ -51,7 +51,7 @@ class TestExceptionStateHandling:
             def __init__(self):
                 self.state = "off"
 
-            @transition(source="off", target="on", on_exception="failed")
+            @transition(source="off", target="on", on_error="failed")
             def turn_on(self):
                 raise ValueError
 
