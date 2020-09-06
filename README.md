@@ -26,7 +26,9 @@ class LightSwitch(StateMachine):
 ```
 
 The `transition` decorator can be used to specify valid state transitions
-with optional parameters for `conditions`:
+with an optional parameter for `conditions`.
+All condition functions need to return `True` for the transition to occur,
+else a `ConditionNotMet` exception will be raised.
 
 ```python
     @transition(source="off", target="on", conditions=[light_is_off])
@@ -37,8 +39,8 @@ def light_is_off(machine):
     return machine.state == "off"
 ```
 
-Can also specify an `on_error` parameter when the transition function
-raises an exception:
+Can also specify an `on_error` parameter to handle situations
+where the transition function raises an exception:
 
 ```python
     @transition(source="off", target="on", on_error="failed")
