@@ -50,8 +50,6 @@ where the transition function raises an exception:
 
 ## Example
 
-See [examples](/examples) for additional State Machine workflows.
-
 ```python
 from finite_state_machine import StateMachine, transition
 
@@ -109,6 +107,8 @@ InvalidStartState                         Traceback (most recent call last)
 
 InvalidStartState:
 ```
+
+The [examples](/examples) folder has additional State Machine workflows.
 
 ## Contributing
 
