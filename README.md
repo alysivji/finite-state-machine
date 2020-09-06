@@ -14,11 +14,39 @@ pip install finite-state-machine
 
 ## Usage
 
-You will need to subclass `StateMachine` and set the `state` instance variable.
+Subclass `StateMachine` and set the `state` instance variable:
 
-The `transition` decorator can be used to specify valid transitions.
+```python
+from finite_state_machine import StateMachine, transition
 
-See [examples](/examples) for sample State Machine workflows.
+class LightSwitch(StateMachine):
+    def __init__(self):
+        self.state = "off"
+        super().__init__()
+```
+
+The `transition` decorator can be used to specify valid state transitions
+with an optional parameter for `conditions`.
+All condition functions need to return `True` for the transition to occur,
+else a `ConditionNotMet` exception will be raised.
+
+```python
+    @transition(source="off", target="on", conditions=[light_is_off])
+    def turn_on(self):
+        # specify side effects
+
+def light_is_off(machine):
+    return machine.state == "off"
+```
+
+Can also specify an `on_error` parameter to handle situations
+where the transition function raises an exception:
+
+```python
+    @transition(source="off", target="on", on_error="failed")
+    def turn_on(self):
+        raise ValueError
+```
 
 ## Example
 
@@ -79,6 +107,8 @@ InvalidStartState                         Traceback (most recent call last)
 
 InvalidStartState:
 ```
+
+The [examples](/examples) folder has additional State Machine workflows.
 
 ## Contributing
 
