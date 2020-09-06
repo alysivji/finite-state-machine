@@ -46,7 +46,7 @@ class TestExceptionStateHandling:
             def state_transition(instance):
                 pass
 
-    def test_state_machine_goes_into_exception_state_when_exception_occurs(self):
+    def test_state_machine_goes_into_on_error_state_when_exception_occurs(self):
         class LightSwitch(StateMachine):
             def __init__(self):
                 self.state = "off"
@@ -66,5 +66,5 @@ class TestExceptionStateHandling:
         # Act
         switch.turn_on()
 
-        # Act
+        # Assert
         assert switch.state == "failed"
