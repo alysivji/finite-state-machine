@@ -17,7 +17,7 @@ def import_state_machine_class(class_path):
     return obj
 
 
-def create_state_diagram_in_mermaid_markdown(cls, initial_state):
+def generate_state_diagram_markdown(cls, initial_state):
     """Create State Diagram in Mermaid Markdown
 
     https://mermaid-js.github.io/mermaid/diagrams-and-syntax-and-examples/stateDiagram.html
@@ -97,7 +97,7 @@ def main():
     sys.path.append(os.getcwd())
     class_obj = import_state_machine_class(class_path)
 
-    markdown = create_state_diagram_in_mermaid_markdown(class_obj, initial_state)
+    markdown = generate_state_diagram_markdown(class_obj, initial_state)
     print(markdown)
 
 

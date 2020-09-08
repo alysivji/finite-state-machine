@@ -1,8 +1,5 @@
-from finite_state_machine import (
-    create_state_diagram_in_mermaid_markdown,
-    StateMachine,
-    transition,
-)
+from finite_state_machine import StateMachine, transition
+from finite_state_machine.draw_state_diagram import generate_state_diagram_markdown
 
 
 def test_turnstile_diagram_without_initial_state():
@@ -19,9 +16,7 @@ def test_turnstile_diagram_without_initial_state():
             pass
 
     # Act
-    mermaid_markdown = create_state_diagram_in_mermaid_markdown(
-        Turnstile, initial_state=None
-    )
+    mermaid_markdown = generate_state_diagram_markdown(Turnstile, initial_state=None)
 
     # Assert
     assert "stateDiagram-v2" in mermaid_markdown
@@ -45,9 +40,7 @@ def test_turnstile_diagram_with_initial_state():
             pass
 
     # Act
-    mermaid_markdown = create_state_diagram_in_mermaid_markdown(
-        Turnstile, initial_state="close"
-    )
+    mermaid_markdown = generate_state_diagram_markdown(Turnstile, initial_state="close")
 
     # Assert
     assert "stateDiagram-v2" in mermaid_markdown
