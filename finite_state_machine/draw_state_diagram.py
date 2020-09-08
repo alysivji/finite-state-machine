@@ -8,10 +8,6 @@ from typing import List
 from finite_state_machine.state_machine import Transition
 
 
-def add_current_working_directory_to_path():
-    sys.path.append(os.getcwd())
-
-
 def import_state_machine_class(class_path):
     modname, qualname_separator, qualname = class_path.partition(":")
     obj = importlib.import_module(modname)
@@ -21,7 +17,7 @@ def import_state_machine_class(class_path):
     return obj
 
 
-def create_state_diagram_in_mermaid_markdown(cls):
+def create_state_diagram_in_mermaid_markdown(cls, initial_state):
     """Create State Diagram in Mermaid Markdown
 
     https://mermaid-js.github.io/mermaid/diagrams-and-syntax-and-examples/stateDiagram.html
@@ -67,7 +63,8 @@ def create_state_diagram_in_mermaid_markdown(cls):
                 all_state_transitions.append(t)
 
         mermaid_markdown = "stateDiagram-v2\n"
-        mermaid_markdown += f"    [*] --> {cls.initial_state}\n"
+        if initial_state:
+            mermaid_markdown += f"    [*] --> {initial_state}\n"
         for t in all_state_transitions:
             mermaid_markdown += t
 
@@ -84,15 +81,24 @@ def parse_args():
         help="Path to State Machine class, e.g. importable.module:class",
         required=True,
     )
+    parser.add_argument(
+        "--initial_state",
+        type=str,
+        help="Initial state of State Machine",
+        required=False,
+    )
     return vars(parser.parse_args())
 
 
 def main():
     args = parse_args()
     class_path = args["class"]
-    add_current_working_directory_to_path()
+    initial_state = args["initial_state"]
+
+    sys.path.append(os.getcwd())
     class_obj = import_state_machine_class(class_path)
-    markdown = create_state_diagram_in_mermaid_markdown(class_obj)
+
+    markdown = create_state_diagram_in_mermaid_markdown(class_obj, initial_state)
     print(markdown)
 
 
