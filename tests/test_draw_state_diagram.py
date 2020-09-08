@@ -20,6 +20,7 @@ def test_turnstile_diagram_without_initial_state():
 
     # Assert
     assert "stateDiagram-v2" in mermaid_markdown
+    assert "[*] --> close" not in mermaid_markdown
     assert "close --> open : insert_coin" in mermaid_markdown
     assert "open --> open : insert_coin" in mermaid_markdown
     assert "open --> close : pass_thru" in mermaid_markdown
