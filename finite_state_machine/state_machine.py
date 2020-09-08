@@ -1,4 +1,6 @@
 import functools
+from typing import NamedTuple, Union
+
 from .exceptions import ConditionNotMet, InvalidStartState
 
 
@@ -8,6 +10,14 @@ class StateMachine:
             self.state
         except AttributeError:
             raise ValueError("Need to set a state instance variable")
+
+
+class Transition(NamedTuple):
+    name: str
+    source: Union[list, bool, int, str]
+    target: Union[bool, int, str]
+    conditions: list
+    on_error: Union[bool, int, str]
 
 
 def transition(source, target, conditions=None, on_error=None):
@@ -31,6 +41,8 @@ def transition(source, target, conditions=None, on_error=None):
             raise ValueError("on_error needs to be a bool, int or string")
 
     def transition_decorator(func):
+        func.__fsm = Transition(func.__name__, source, target, conditions, on_error)
+
         @functools.wraps(func)
         def _wrapper(*args, **kwargs):
             try:

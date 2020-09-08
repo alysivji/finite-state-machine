@@ -1,0 +1,30 @@
+from finite_state_machine import (
+    create_state_diagram_in_mermaid_markdown,
+    StateMachine,
+    transition,
+)
+
+
+def test_turnstile_diagram():
+    # Arrange
+    class Turnstile(StateMachine):
+        initial_state = "close"
+
+        @transition(source=["close", "open"], target="open")
+        def insert_coin(self):
+            pass
+
+        @transition(source="open", target="close", on_error="failed")
+        def pass_thru(self):
+            pass
+
+    # Act
+    mermaid_markdown = create_state_diagram_in_mermaid_markdown(Turnstile)
+
+    # Assert
+    assert "stateDiagram-v2" in mermaid_markdown
+    assert "[*] --> close" in mermaid_markdown
+    assert "close --> open : insert_coin" in mermaid_markdown
+    assert "open --> open : insert_coin" in mermaid_markdown
+    assert "open --> close : pass_thru" in mermaid_markdown
+    assert "open --> failed : on_error" in mermaid_markdown
