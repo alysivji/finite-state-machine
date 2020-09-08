@@ -47,6 +47,8 @@ class TestExceptionStateHandling:
                 pass
 
     def test_state_machine_goes_into_on_error_state_when_exception_occurs(self):
+        """happy path when error occurs"""
+
         class LightSwitch(StateMachine):
             def __init__(self):
                 self.state = "off"
@@ -68,3 +70,51 @@ class TestExceptionStateHandling:
 
         # Assert
         assert switch.state == "failed"
+
+    def test_state_machine_transition_function_does_not_raise_exception(self):
+        """happy path => when transition function runs without an error"""
+
+        class LightSwitch(StateMachine):
+            def __init__(self):
+                self.state = "off"
+
+            @transition(source="off", target="on", on_error="failed")
+            def turn_on(self):
+                pass
+
+            @transition(source="on", target="off", on_error="failed")
+            def turn_off(self):
+                pass
+
+        # Arrange
+        switch = LightSwitch()
+        assert switch.state == "off"
+
+        # Act
+        switch.turn_on()
+
+        # Assert
+        assert switch.state == "on"
+
+    def test_on_error_parameter_is_not_set_and_transition_function_raises_error(self):
+        """Transition function raises error, but on_error parameter is not set"""
+
+        class LightSwitch(StateMachine):
+            def __init__(self):
+                self.state = "off"
+
+            @transition(source="off", target="on")
+            def turn_on(self):
+                raise ValueError("expected error")
+
+            @transition(source="on", target="off")
+            def turn_off(self):
+                pass
+
+        # Arrange
+        switch = LightSwitch()
+        assert switch.state == "off"
+
+        # Act / Assert
+        with pytest.raises(ValueError, match="expected error"):
+            switch.turn_on()

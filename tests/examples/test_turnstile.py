@@ -22,5 +22,5 @@ def test_turnstile__cannot_pass_thru_closed_turnstile():
     t = Turnstile()
     assert t.state == "close"
 
-    with pytest.raises(InvalidStartState):
+    with pytest.raises(InvalidStartState, match="Current state is close"):
         t.pass_thru()
