@@ -1,5 +1,6 @@
 # Finite State Machine
 
+[![Python 3.6+](https://img.shields.io/badge/Python-3.6+-blue.svg)](https://www.python.org/download/releases/3.6.0/)
 [![Build Status](https://github.com/alysivji/finite-state-machine/workflows/build/badge.svg)](https://github.com/alysivji/finite-state-machine/actions?query=workflow%3A%22build%22)
 [![License: MIT](https://img.shields.io/badge/License-MIT-red.svg)](https://opensource.org/licenses/MIT)
 [![Code Style: Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
