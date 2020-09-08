@@ -52,5 +52,5 @@ def test_enabled_account_cannot_be_reenabled(create_account):
     account = create_account(enabled=True)
     t = EnableFeatureStateMachine(account)
 
-    with pytest.raises(InvalidStartState):
+    with pytest.raises(InvalidStartState, match="Current state is True"):
         t.enable_feature()

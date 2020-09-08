@@ -51,7 +51,11 @@ def transition(source, target, conditions=None, on_error=None):
                 self = args[0]
 
             if self.state not in source:
-                raise InvalidStartState
+                exception_message = (
+                    f"Current state is {self.state}. "
+                    f"{func.__name__} allows transitions from {source}."
+                )
+                raise InvalidStartState(exception_message)
 
             for condition in conditions:
                 if not condition(self):

@@ -47,6 +47,8 @@ class TestExceptionStateHandling:
                 pass
 
     def test_state_machine_goes_into_on_error_state_when_exception_occurs(self):
+        """happy path"""
+
         class LightSwitch(StateMachine):
             def __init__(self):
                 self.state = "off"
@@ -88,6 +90,6 @@ class TestExceptionStateHandling:
         switch = LightSwitch()
         assert switch.state == "off"
 
-        # Act
+        # Act / Assert
         with pytest.raises(ValueError, match="expected error"):
             switch.turn_on()
