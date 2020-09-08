@@ -25,4 +25,4 @@ license="MIT"
 exclude = ["tests"]
 
 [tool.flit.scripts]
-draw_state_diagram = "finite_state_machine.draw_state_diagram:main"
+fsm_draw_state_diagram = "finite_state_machine.draw_state_diagram:main"

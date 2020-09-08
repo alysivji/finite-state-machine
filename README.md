@@ -135,16 +135,16 @@ State Machine workflows can be visualized using a
 which can be viewed using the
 [Mermaid Live Editor](https://mermaid-js.github.io/mermaid-live-editor).
 
-Use the `draw_state_diagram` command and point to
+Use the `fsm_draw_state_diagram` command and point to
 State Machine workflow class
 that inheritences from `StateMachine`.
 
 ```console
 # class parameter is required
-$ draw_state_diagram --class examples.turnstile:Turnstile
+$ fsm_draw_state_diagram --class examples.turnstile:Turnstile
 
 # initial_state parameter is optional
-$ draw_state_diagram --class examples.turnstile:Turnstile --initial_state close
+$ fsm_draw_state_diagram --class examples.turnstile:Turnstile --initial_state close
 ```
 
 ## Contributing
