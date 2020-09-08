@@ -8,8 +8,12 @@ from typing import List
 from finite_state_machine.state_machine import Transition
 
 
-def import_state_machine_class(class_path):
-    modname, qualname_separator, qualname = class_path.partition(":")
+def import_state_machine_class(path):  # pragma: no cover
+    """Load State Machine workflow class
+
+    Copied from https://packaging.python.org/specifications/entry-points/#data-model
+    """
+    modname, qualname_separator, qualname = path.partition(":")
     obj = importlib.import_module(modname)
     if qualname_separator:
         for attr in qualname.split("."):
@@ -71,7 +75,7 @@ def generate_state_diagram_markdown(cls, initial_state):
     return mermaid_markdown
 
 
-def parse_args():
+def parse_args():  # pragma: no cover
     description = "Create State Diagram for a State Machine"
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument(
@@ -89,7 +93,7 @@ def parse_args():
     return vars(parser.parse_args())
 
 
-def main():
+def main():  # pragma: no cover
     args = parse_args()
     class_path = args["class"]
     initial_state = args["initial_state"]
