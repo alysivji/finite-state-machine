@@ -12,3 +12,6 @@ test-cov: ## run tests with coverage
 
 test-covhtml: ## run tests with coverage; view in browser
 	pytest --cov finite_state_machine/ --cov examples/ --cov-report html && open ./htmlcov/index.html
+
+changelog:  ## generate changelog v=""
+	python ./scripts/generate_changelog.py --version=$(v)
