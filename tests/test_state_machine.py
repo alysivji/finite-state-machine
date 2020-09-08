@@ -68,3 +68,26 @@ class TestExceptionStateHandling:
 
         # Assert
         assert switch.state == "failed"
+
+    def test_on_error_parameter_is_not_set_and_transition_function_raises_error(self):
+        """Transition function raises error, but on_error parameter is not set"""
+
+        class LightSwitch(StateMachine):
+            def __init__(self):
+                self.state = "off"
+
+            @transition(source="off", target="on")
+            def turn_on(self):
+                raise ValueError("expected error")
+
+            @transition(source="on", target="off")
+            def turn_off(self):
+                pass
+
+        # Arrange
+        switch = LightSwitch()
+        assert switch.state == "off"
+
+        # Act
+        with pytest.raises(ValueError, match="expected error"):
+            switch.turn_on()

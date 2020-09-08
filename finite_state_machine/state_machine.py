@@ -57,12 +57,21 @@ def transition(source, target, conditions=None, on_error=None):
                 if not condition(self):
                     raise ConditionNotMet(condition)
 
+            if not on_error:
+                result = func(*args, **kwargs)
+                self.state = target
+                return result
+
             try:
                 result = func(*args, **kwargs)
                 self.state = target
                 return result
             except Exception:
+                # TODO should we log this somewhere?
+                # logger.error? maybe have an optional parameter to set this up
+                # how to libraries log?
                 self.state = on_error
+                return
 
         return _wrapper
 
