@@ -4,6 +4,9 @@ help: ## help
 install: ## install development requirements
 	pip install -r requirements_dev.txt
 
+install-localdev:  ## install library for local development; pip install -e .
+	flit install --symlink
+
 test: ## run tests
 	pytest
 
