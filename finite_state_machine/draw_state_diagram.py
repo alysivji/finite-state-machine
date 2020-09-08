@@ -1,7 +1,18 @@
+import argparse
+import importlib
 import inspect
 from typing import List
 
-from .state_machine import Transition
+from finite_state_machine.state_machine import Transition
+
+
+def import_state_machine_class(class_path):
+    modname, qualname_separator, qualname = class_path.partition(":")
+    obj = importlib.import_module(modname)
+    if qualname_separator:
+        for attr in qualname.split("."):
+            obj = getattr(obj, attr)
+    return obj
 
 
 def create_state_diagram_in_mermaid_markdown(cls):
@@ -50,3 +61,29 @@ def create_state_diagram_in_mermaid_markdown(cls):
             mermaid_markdown += t
 
     return mermaid_markdown
+
+
+def parse_args():
+    # TODO make this callable from the command line where you can pass in information
+    description = "Create State Diagram for a State Machine"
+    parser = argparse.ArgumentParser(description=description)
+    parser.add_argument(
+        "-c",
+        "--class",
+        type=str,
+        help="Path to State Machine class, e.g. importable.module:class",
+        required=True,
+    )
+    return vars(parser.parse_args())
+
+
+def main():
+    args = parse_args()
+    class_path = args["class"]
+    class_obj = import_state_machine_class(class_path)
+    markdown = create_state_diagram_in_mermaid_markdown(class_obj)
+    print(markdown)
+
+
+if __name__ == "__main__":
+    main()
