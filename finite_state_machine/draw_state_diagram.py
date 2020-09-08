@@ -75,7 +75,6 @@ def parse_args():
     description = "Create State Diagram for a State Machine"
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument(
-        "-c",
         "--class",
         type=str,
         help="Path to State Machine class, e.g. importable.module:class",
