@@ -1,9 +1,15 @@
 import argparse
 import importlib
 import inspect
+import os
+import sys
 from typing import List
 
 from finite_state_machine.state_machine import Transition
+
+
+def add_current_working_directory_to_path():
+    sys.path.append(os.getcwd())
 
 
 def import_state_machine_class(class_path):
@@ -16,6 +22,11 @@ def import_state_machine_class(class_path):
 
 
 def create_state_diagram_in_mermaid_markdown(cls):
+    """Create State Diagram in Mermaid Markdown
+
+    https://mermaid-js.github.io/mermaid/diagrams-and-syntax-and-examples/stateDiagram.html
+    """
+
     class_fns = inspect.getmembers(cls, predicate=inspect.isfunction)
     state_transitions: List[Transition] = [
         func.__fsm for name, func in class_fns if hasattr(func, "__fsm")
@@ -64,7 +75,6 @@ def create_state_diagram_in_mermaid_markdown(cls):
 
 
 def parse_args():
-    # TODO make this callable from the command line where you can pass in information
     description = "Create State Diagram for a State Machine"
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument(
@@ -80,6 +90,7 @@ def parse_args():
 def main():
     args = parse_args()
     class_path = args["class"]
+    add_current_working_directory_to_path()
     class_obj = import_state_machine_class(class_path)
     markdown = create_state_diagram_in_mermaid_markdown(class_obj)
     print(markdown)
