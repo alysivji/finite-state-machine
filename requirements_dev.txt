@@ -1,4 +1,11 @@
 -r requirements.txt
+
+# testing
 pytest==6.0.1
 pytest-cov==2.10.1
+
+# package management
+flit==3.0.0
+
+# generating changelog
 requests==2.23.0
