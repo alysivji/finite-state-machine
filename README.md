@@ -155,6 +155,12 @@ $ fsm_draw_state_diagram --class examples.turnstile:Turnstile --initial_state cl
 1. Install [pre-commit](https://pre-commit.com/)
 1. Set up pre-commit hooks in repo: `pre-commit install`
 
+To install a package locally for development, run:
+
+```console
+flit install [--symlink] [--python path/to/python]
+```
+
 ### Running Tests
 
 ```console
