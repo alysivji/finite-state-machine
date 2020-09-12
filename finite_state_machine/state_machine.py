@@ -63,7 +63,7 @@ def transition(source, target, conditions=None, on_error=None):
 
             conditions_not_met = []
             for condition in conditions:
-                if not condition(self):
+                if not condition(*args, **kwargs):
                     conditions_not_met.append(condition)
             if conditions_not_met:
                 raise ConditionsNotMet(conditions_not_met)
