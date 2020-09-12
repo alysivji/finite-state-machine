@@ -11,7 +11,7 @@ class GitHubPullRequest(StateMachine):
     def __init__(self):
         self.state = "opened"
         self.num_approvals = 0
-        self.request_changes = False
+        self.changes_request = False
 
     @transition(source="opened", target="opened")
     def approve(self):
@@ -19,7 +19,7 @@ class GitHubPullRequest(StateMachine):
 
     @transition(source="opened", target="opened")
     def request_changes(self):
-        self.request_changes = True
+        self.changes_request = True
 
     @transition(source="opened", target="closed")
     def close_pull_request(self):

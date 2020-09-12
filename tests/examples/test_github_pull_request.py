@@ -41,6 +41,7 @@ def test_request_approval():
 
     # Assert
     assert github_pr.state == "opened"
+    assert github_pr.changes_request is True
 
 
 def test_close_pull_request():
