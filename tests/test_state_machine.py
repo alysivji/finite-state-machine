@@ -30,12 +30,13 @@ def test_target_parameter_is_tuple():
             pass
 
 
-def test_conditions_parameter_is_tuple():
-    with pytest.raises(ValueError, match="Conditions needs to be a list"):
+class TestConditionsParameter:
+    def test_conditions_parameter_is_invalid(self):
+        with pytest.raises(ValueError, match="conditions must be a list"):
 
-        @transition(source="here", target="there", conditions=(1, 2))
-        def conditions_check(instance):
-            pass
+            @transition(source="here", target="there", conditions=(1, 2))
+            def conditions_check(instance):
+                pass
 
 
 class TestExceptionStateHandling:

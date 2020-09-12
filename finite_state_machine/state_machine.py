@@ -34,7 +34,7 @@ def transition(source, target, conditions=None, on_error=None):
     if not conditions:
         conditions = []
     if not isinstance(conditions, list):
-        raise ValueError("Conditions needs to be a list")
+        raise ValueError("conditions must be a list")
 
     if on_error:
         if type(on_error) not in allowed_types:
