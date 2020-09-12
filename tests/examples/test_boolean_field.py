@@ -2,7 +2,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from finite_state_machine.exceptions import ConditionNotMet, InvalidStartState
+from finite_state_machine.exceptions import ConditionsNotMet, InvalidStartState
 from examples.boolean_field import EnableFeatureStateMachine
 
 
@@ -44,7 +44,7 @@ def test_disabled_account_with_oustanding_bill_cannot_be_enabled(create_account)
     account = create_account(enabled=False, bills_oustanding=[1, 2, 3])
     t = EnableFeatureStateMachine(account)
 
-    with pytest.raises(ConditionNotMet):
+    with pytest.raises(ConditionsNotMet):
         t.enable_feature()
 
 
