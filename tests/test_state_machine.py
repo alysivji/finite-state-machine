@@ -38,6 +38,38 @@ class TestConditionsParameter:
             def conditions_check(instance):
                 pass
 
+    def test_conditions_list_is_not_all_functions_raises_error(self):
+        def condition_function1(self):
+            return True
+
+        def conditions_function2(self):
+            return True
+
+        with pytest.raises(ValueError, match="conditions list must contain functions"):
+
+            @transition(
+                source="here",
+                target="there",
+                conditions=[condition_function1, conditions_function2, True],
+            )
+            def conditions_check(instance):
+                pass
+
+    def test_conditions_parameter_happy_path(self):
+        def condition_function1(self):
+            return True
+
+        def conditions_function2(self):
+            return True
+
+        @transition(
+            source="here",
+            target="there",
+            conditions=[condition_function1, conditions_function2],
+        )
+        def conditions_check(instance):
+            pass
+
 
 class TestExceptionStateHandling:
     def test_on_error_parameter_is_invalid(self):

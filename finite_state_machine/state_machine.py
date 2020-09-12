@@ -1,4 +1,5 @@
 import functools
+import types
 from typing import NamedTuple, Union
 
 from .exceptions import ConditionNotMet, InvalidStartState
@@ -35,6 +36,9 @@ def transition(source, target, conditions=None, on_error=None):
         conditions = []
     if not isinstance(conditions, list):
         raise ValueError("conditions must be a list")
+    for condition in conditions:
+        if not isinstance(condition, types.FunctionType):
+            raise ValueError("conditions list must contain functions")
 
     if on_error:
         if type(on_error) not in allowed_types:
