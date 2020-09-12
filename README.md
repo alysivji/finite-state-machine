@@ -44,6 +44,8 @@ The `transition` decorator can be used to specify valid state transitions
 with an optional parameter for `conditions`.
 All condition functions need to return `True` for the transition to occur,
 else a `ConditionsNotMet` exception will be raised.
+Condition functions require the same positional position and
+keyword arguments present in the transition function.
 
 ```python
     @transition(source="off", target="on", conditions=[light_is_off])
