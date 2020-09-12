@@ -1,4 +1,5 @@
 from finite_state_machine import StateMachine, transition
+from finite_state_machine.exceptions import ConditionsNotMet
 import pytest
 
 
@@ -69,6 +70,37 @@ class TestConditionsParameter:
         )
         def conditions_check(instance):
             pass
+
+    def test_list_all_conditions_that_are_not_True(self):
+        def false_condition_function1(self):
+            return False
+
+        def false_condition_function2(self):
+            return False
+
+        class LightSwitch(StateMachine):
+            def __init__(self):
+                self.state = "off"
+
+            @transition(
+                source="off",
+                target="on",
+                conditions=[false_condition_function1, false_condition_function2],
+            )
+            def turn_on(self):
+                pass
+
+            @transition(source="on", target="off")
+            def turn_off(self):
+                pass
+
+        switch = LightSwitch()
+        error_text = (
+            "Following conditions did not return True: "
+            "false_condition_function1, false_condition_function2"
+        )
+        with pytest.raises(ConditionsNotMet, match=error_text):
+            switch.turn_on()
 
 
 class TestExceptionStateHandling:

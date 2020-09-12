@@ -2,7 +2,7 @@ import functools
 import types
 from typing import NamedTuple, Union
 
-from .exceptions import ConditionNotMet, InvalidStartState
+from .exceptions import ConditionsNotMet, InvalidStartState
 
 
 class StateMachine:
@@ -61,9 +61,12 @@ def transition(source, target, conditions=None, on_error=None):
                 )
                 raise InvalidStartState(exception_message)
 
+            conditions_not_met = []
             for condition in conditions:
                 if not condition(self):
-                    raise ConditionNotMet(condition)
+                    conditions_not_met.append(condition)
+            if conditions_not_met:
+                raise ConditionsNotMet(conditions_not_met)
 
             if not on_error:
                 result = func(*args, **kwargs)
