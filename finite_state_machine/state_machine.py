@@ -71,7 +71,12 @@ def transition(source, target, conditions=None, on_error=None):
             raise ValueError("on_error needs to be a bool, int or string")
 
     def transition_decorator(func):
-        func.__fsm = Transition(func.__name__, source, target, conditions, on_error)
+        func.__fsm = TransitionMeta(func.__name__)
+        if isinstance(source, (list, tuple, set)):
+            for item in source:
+                func._fsm.add_transition(item, target, on_error, conditions)
+        else:
+            func._fsm.add_transition(source, target, on_error, conditions)
 
         @functools.wraps(func)
         def _wrapper(*args, **kwargs):
@@ -80,15 +85,15 @@ def transition(source, target, conditions=None, on_error=None):
             except ValueError:
                 self = args[0]
 
-            if self.state not in source:
+            if self.state not in func._fsm.transitions:
                 exception_message = (
                     f"Current state is {self.state}. "
-                    f"{func.__name__} allows transitions from {source}."
+                    f"{func._fsm.name} allows transitions from {func._fsm.transitions}."
                 )
                 raise InvalidStartState(exception_message)
 
             conditions_not_met = []
-            for condition in conditions:
+            for condition in func._fsm.transitions[self.state].conditions:
                 if not condition(*args, **kwargs):
                     conditions_not_met.append(condition)
             if conditions_not_met:
@@ -96,7 +101,7 @@ def transition(source, target, conditions=None, on_error=None):
 
             if not on_error:
                 result = func(*args, **kwargs)
-                self.state = target
+                self.state = func._fsm.transitions[self.state].target
                 return result
 
             try:
