@@ -20,6 +20,8 @@ class Transition(NamedTuple):
     conditions: list
     on_error: Union[bool, int, str]
 
+class TransitionMeta(object):
+    pass
 
 def transition(source, target, conditions=None, on_error=None):
     allowed_types = [str, bool, int]
