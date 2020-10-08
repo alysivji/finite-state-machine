@@ -2,7 +2,7 @@ import functools
 import types
 from typing import NamedTuple, Union
 
-from .exceptions import ConditionsNotMet, InvalidStartState
+from .exceptions import ConditionsNotMet, InvalidStartState, TransitionNotAllowed
 
 
 class StateMachine:
@@ -19,33 +19,33 @@ class Transition(NamedTuple):
     conditions: list
     on_error: Union[bool, int, str]
 
+
 class TransitionMeta(object):
-        def __init__(self, name):
+    def __init__(self, name):
         self.name = name
         self.transitions = {}
-    
+
     def get_transition(self, source):
         transition = self.transitions.get(source, None)
         if transition is None:
-            transition = self.transitions.get('*', None)
+            transition = self.transitions.get("*", None)
         if transition is None:
-            transition = self.transitions.get('+', None)
+            transition = self.transitions.get("+", None)
         return transition
-    
+
     def add_transition(self, source, target, on_error=None, conditions=[]):
         if source in self.transitions:
-            raise AssertionError('Duplicate transition for {0} state'.format(source))
+            raise AssertionError("Duplicate transition for {0} state".format(source))
         self.transitions[source] = Transition(
-            source=source,
-            target=target,
-            on_error=on_error,
-            conditions=conditions)
+            source=source, target=target, on_error=on_error, conditions=conditions
+        )
 
     def next_state(self, current_state):
         transition = self.get_transition(current_state)
         if transition is None:
-            raise TransitionNotAllowed('No transition from {0}'.format(current_state))
+            raise TransitionNotAllowed("No transition from {0}".format(current_state))
         return transition.target
+
 
 def transition(source, target, conditions=None, on_error=None):
     allowed_types = [str, bool, int]
@@ -74,9 +74,9 @@ def transition(source, target, conditions=None, on_error=None):
         func.__fsm = TransitionMeta(func.__name__)
         if isinstance(source, (list, tuple, set)):
             for item in source:
-                func._fsm.add_transition(item, target, on_error, conditions)
+                func.__fsm.add_transition(item, target, on_error, conditions)
         else:
-            func._fsm.add_transition(source, target, on_error, conditions)
+            func.__fsm.add_transition(source, target, on_error, conditions)
 
         @functools.wraps(func)
         def _wrapper(*args, **kwargs):
@@ -85,7 +85,7 @@ def transition(source, target, conditions=None, on_error=None):
             except ValueError:
                 self = args[0]
 
-            if self.state not in func._fsm.transitions:
+            if self.state not in func.__fsm.transitions:
                 exception_message = (
                     f"Current state is {self.state}. "
                     f"{func._fsm.name} allows transitions from {func._fsm.transitions}."
@@ -93,7 +93,7 @@ def transition(source, target, conditions=None, on_error=None):
                 raise InvalidStartState(exception_message)
 
             conditions_not_met = []
-            for condition in func._fsm.transitions[self.state].conditions:
+            for condition in func.__fsm.transitions[self.state].conditions:
                 if not condition(*args, **kwargs):
                     conditions_not_met.append(condition)
             if conditions_not_met:
@@ -101,7 +101,7 @@ def transition(source, target, conditions=None, on_error=None):
 
             if not on_error:
                 result = func(*args, **kwargs)
-                self.state = func._fsm.transitions[self.state].target
+                self.state = func.__fsm.transitions[self.state].target
                 return result
 
             try:
