@@ -14,6 +14,7 @@ class StateMachine:
 
 
 class Transition(NamedTuple):
+    name: str
     source: Union[list, bool, int, str]
     target: Union[bool, int, str]
     conditions: list
@@ -37,7 +38,7 @@ class TransitionMeta(object):
         if source in self.transitions:
             raise AssertionError("Duplicate transition for {0} state".format(source))
         self.transitions[source] = Transition(
-            source=source, target=target, on_error=on_error, conditions=conditions
+            name=self.name, source=source, target=target, on_error=on_error, conditions=conditions
         )
 
     def next_state(self, current_state):

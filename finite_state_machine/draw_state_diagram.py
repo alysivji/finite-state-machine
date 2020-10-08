@@ -5,7 +5,7 @@ import os
 import sys
 from typing import List
 
-from finite_state_machine.state_machine import Transition
+from finite_state_machine.state_machine import TransitionMeta
 
 
 def import_state_machine_class(path):  # pragma: no cover
@@ -28,9 +28,12 @@ def generate_state_diagram_markdown(cls, initial_state):
     """
 
     class_fns = inspect.getmembers(cls, predicate=inspect.isfunction)
-    state_transitions: List[Transition] = [
-        func.__fsm for name, func in class_fns if hasattr(func, "__fsm")
-    ]
+    
+    state_transitions = []
+    for func in class_fns: 
+        if hasattr(func[1], "__fsm"):
+            for val in list(func[1].__fsm.transitions.values()):
+                state_transitions.append(val)
 
     transition_template = "    {source} --> {target} : {name}\n"
 
