@@ -14,14 +14,38 @@ class StateMachine:
 
 
 class Transition(NamedTuple):
-    name: str
     source: Union[list, bool, int, str]
     target: Union[bool, int, str]
     conditions: list
     on_error: Union[bool, int, str]
 
 class TransitionMeta(object):
-    pass
+        def __init__(self, name):
+        self.name = name
+        self.transitions = {}
+    
+    def get_transition(self, source):
+        transition = self.transitions.get(source, None)
+        if transition is None:
+            transition = self.transitions.get('*', None)
+        if transition is None:
+            transition = self.transitions.get('+', None)
+        return transition
+    
+    def add_transition(self, source, target, on_error=None, conditions=[]):
+        if source in self.transitions:
+            raise AssertionError('Duplicate transition for {0} state'.format(source))
+        self.transitions[source] = Transition(
+            source=source,
+            target=target,
+            on_error=on_error,
+            conditions=conditions)
+
+    def next_state(self, current_state):
+        transition = self.get_transition(current_state)
+        if transition is None:
+            raise TransitionNotAllowed('No transition from {0}'.format(current_state))
+        return transition.target
 
 def transition(source, target, conditions=None, on_error=None):
     allowed_types = [str, bool, int]
