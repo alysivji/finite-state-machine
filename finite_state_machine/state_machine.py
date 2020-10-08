@@ -88,7 +88,7 @@ def transition(source, target, conditions=None, on_error=None):
             if self.state not in func.__fsm.transitions:
                 exception_message = (
                     f"Current state is {self.state}. "
-                    f"{func._fsm.name} allows transitions from {func._fsm.transitions}."
+                    f"{func.__fsm.name} allows transitions from {func.__fsm.transitions}."
                 )
                 raise InvalidStartState(exception_message)
 
