@@ -1,12 +1,14 @@
 import functools
 import types
 from typing import NamedTuple, Union
+import inspect
 
-from .exceptions import ConditionsNotMet, InvalidStartState, TransitionNotAllowed
+from .exceptions import ConditionsNotMet, InvalidStartState
 
 
 class StateMachine:
     def __init__(self):
+        self.avail_transitions = {}
         try:
             self.state
         except AttributeError:
@@ -19,33 +21,6 @@ class Transition(NamedTuple):
     target: Union[bool, int, str]
     conditions: list
     on_error: Union[bool, int, str]
-
-
-class TransitionMeta(object):
-    def __init__(self, name):
-        self.name = name
-        self.transitions = {}
-
-    def get_transition(self, source):
-        transition = self.transitions.get(source, None)
-        if transition is None:
-            transition = self.transitions.get("*", None)
-        if transition is None:
-            transition = self.transitions.get("+", None)
-        return transition
-
-    def add_transition(self, source, target, on_error=None, conditions=[]):
-        if source in self.transitions:
-            raise AssertionError("Duplicate transition for {0} state".format(source))
-        self.transitions[source] = Transition(
-            name=self.name, source=source, target=target, on_error=on_error, conditions=conditions
-        )
-
-    def next_state(self, current_state):
-        transition = self.get_transition(current_state)
-        if transition is None:
-            raise TransitionNotAllowed("No transition from {0}".format(current_state))
-        return transition.target
 
 
 def transition(source, target, conditions=None, on_error=None):
@@ -72,12 +47,37 @@ def transition(source, target, conditions=None, on_error=None):
             raise ValueError("on_error needs to be a bool, int or string")
 
     def transition_decorator(func):
-        func.__fsm = TransitionMeta(func.__name__)
-        if isinstance(source, (list, tuple, set)):
-            for item in source:
-                func.__fsm.add_transition(item, target, on_error, conditions)
+        mems = inspect.getmembers(func)
+        state_machine_instance = [
+            mem[1]["StateMachine"] for mem in mems if mem[0] == "__globals__"
+        ][0]
+        func.__fsm = Transition(
+            name=func.__name__,
+            source=source,
+            target=target,
+            conditions=conditions,
+            on_error=on_error,
+        )
+        # need to optimize
+        if hasattr(state_machine_instance, "__fsm"):
+            if isinstance(source, list):
+                for src in source:
+                    if src in state_machine_instance.__fsm:
+                        state_machine_instance.__fsm[src].append(target)
+                    else:
+                        state_machine_instance.__fsm[src] = [target]
+            else:
+                if source in state_machine_instance.__fsm:
+                    state_machine_instance.__fsm[src].append(target)
+                else:
+                    state_machine_instance.__fsm[src] = [target]
         else:
-            func.__fsm.add_transition(source, target, on_error, conditions)
+            if isinstance(source, list):
+                state_machine_instance.__fsm = {}
+                for src in source:
+                    state_machine_instance.__fsm[src] = [target]
+            else:
+                state_machine_instance.__fsm.source = [target]
 
         @functools.wraps(func)
         def _wrapper(*args, **kwargs):
@@ -86,15 +86,15 @@ def transition(source, target, conditions=None, on_error=None):
             except ValueError:
                 self = args[0]
 
-            if self.state not in func.__fsm.transitions:
+            if self.state not in source:
                 exception_message = (
                     f"Current state is {self.state}. "
-                    f"{func.__fsm.name} allows transitions from {func.__fsm.transitions}."
+                    f"{func.__name__} allows transitions from {source}."
                 )
                 raise InvalidStartState(exception_message)
 
             conditions_not_met = []
-            for condition in func.__fsm.transitions[self.state].conditions:
+            for condition in conditions:
                 if not condition(*args, **kwargs):
                     conditions_not_met.append(condition)
             if conditions_not_met:
@@ -102,7 +102,7 @@ def transition(source, target, conditions=None, on_error=None):
 
             if not on_error:
                 result = func(*args, **kwargs)
-                self.state = func.__fsm.transitions[self.state].target
+                self.state = target
                 return result
 
             try:
