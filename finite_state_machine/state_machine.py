@@ -8,7 +8,6 @@ from .exceptions import ConditionsNotMet, InvalidStartState
 
 class StateMachine:
     def __init__(self):
-        self.avail_transitions = {}
         try:
             self.state
         except AttributeError:
@@ -58,7 +57,8 @@ def transition(source, target, conditions=None, on_error=None):
             conditions=conditions,
             on_error=on_error,
         )
-        # need to optimize
+
+        # creating and/or adding items to __fsm attribute
         if hasattr(state_machine_instance, "__fsm"):
             if isinstance(source, list):
                 for src in source:
