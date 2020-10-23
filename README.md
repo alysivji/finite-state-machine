@@ -1,4 +1,4 @@
-![Finite State Machine Banner](https://raw.githubusercontent.com/lucas-andre/finite-state-machine/patch-1/assets/finite-state-machine.png)  
+![Finite State Machine Banner](assets/finite-state-machine.png)  
 
 # Finite State Machine
 
