@@ -1,3 +1,5 @@
+![Finite State Machine Banner](assets/finite-state-machine.png)  
+
 # Finite State Machine
 
 [![Latest Release](https://img.shields.io/pypi/v/finite-state-machine)](https://pypi.org/project/finite-state-machine/)
