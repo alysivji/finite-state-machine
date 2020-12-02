@@ -22,14 +22,14 @@ class Transition(NamedTuple):
 
 
 def transition(source, target, conditions=None, on_error=None):
-    allowed_types = [str, bool, int]
+    allowed_types = (str, bool, int)
 
-    if type(source) in allowed_types:
+    if isinstance(source, allowed_types):
         source = [source]
     if not isinstance(source, list):
         raise ValueError("Source can be a bool, int, string or list")
 
-    if type(target) not in allowed_types:
+    if not isinstance(target, allowed_types):
         raise ValueError("Target needs to be a bool, int or string")
 
     if not conditions:
@@ -41,7 +41,7 @@ def transition(source, target, conditions=None, on_error=None):
             raise ValueError("conditions list must contain functions")
 
     if on_error:
-        if type(on_error) not in allowed_types:
+        if not isinstance(on_error, allowed_types):
             raise ValueError("on_error needs to be a bool, int or string")
 
     def transition_decorator(func):

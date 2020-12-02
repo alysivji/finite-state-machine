@@ -1,3 +1,5 @@
+from enum import IntEnum
+
 from finite_state_machine import StateMachine, transition
 from finite_state_machine.exceptions import ConditionsNotMet
 import pytest
@@ -21,6 +23,16 @@ def test_source_parameter_is_tuple():
         @transition(source=("here",), target="there")
         def conditions_check(instance):
             pass
+
+
+def test_source_target_parameters_are_int_like():
+    class States(IntEnum):
+        some_state = 0
+        some_other_state = 1
+
+    @transition(source=States.some_state, target=States.some_other_state)
+    def conditions_check(instance):
+        pass
 
 
 def test_target_parameter_is_tuple():
