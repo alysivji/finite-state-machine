@@ -18,7 +18,7 @@ def test_state_machine_requires_state_instance_variable():
         LightSwitch()
 
 
-class TestSourceParameterTypes:
+class TestSourceTargetParameterTypes:
     class StateEnum(Enum):
         SOME_STATE = "some_state"
         SOME_OTHER_STATE = "some_other_state"
@@ -59,13 +59,25 @@ class TestSourceParameterTypes:
             def conditions_check(instance):
                 pass
 
+    @pytest.mark.parametrize(
+        "source_state,target_state,why_not_valid",
+        [
+            (
+                "source_state",
+                ("target_state1", "target_state2"),
+                "Tuple is not valid",
+            ),
+            ("source_state", ["target_state1", "target_state2"], "List is not valid"),
+        ],
+    )
+    def test_target_parameter_is_not_valid(
+        self, source_state, target_state, why_not_valid
+    ):
+        with pytest.raises(ValueError, match="Target needs to be a"):
 
-def test_target_parameter_is_tuple():
-    with pytest.raises(ValueError, match="Target needs to be a"):
-
-        @transition(source="here", target=("there",))
-        def conditions_check(instance):
-            pass
+            @transition(source=source_state, target=target_state)
+            def conditions_check(instance):
+                pass
 
 
 class TestConditionsParameter:
