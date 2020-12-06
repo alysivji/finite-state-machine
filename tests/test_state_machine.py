@@ -19,30 +19,36 @@ def test_state_machine_requires_state_instance_variable():
 
 
 class TestSourceParameterTypes:
+    class StateEnum(Enum):
+        SOME_STATE = "some_state"
+        SOME_OTHER_STATE = "some_other_state"
+
+    class StateIntEnum(IntEnum):
+        SOME_STATE = 0
+        SOME_OTHER_STATE = 1
+
+    # TODO try it with str, int, bool types that are not strings
+    @pytest.mark.parametrize(
+        "param_type,source_param,target_param",
+        [
+            ("str", "source_state", "target_state"),
+            ("int", 0, 1),
+            ("bool", True, False),
+            ("Enum", StateEnum.SOME_STATE, StateEnum.SOME_OTHER_STATE),
+            ("IntEnum", StateIntEnum.SOME_STATE, StateIntEnum.SOME_OTHER_STATE)
+        ],
+    )
+    def test_source_parameter_valid_types(self, param_type, source_param, target_param):
+        @transition(source=source_param, target=target_param)
+        def conditions_check(instance):
+            pass
+
     def test_source_parameter_is_tuple(self):
         with pytest.raises(ValueError, match="Source can be a"):
 
             @transition(source=("here",), target="there")
             def conditions_check(instance):
                 pass
-
-    def test_source_parameter_can_be_IntEnum(self):
-        class States(IntEnum):
-            some_state = 0
-            some_other_state = 1
-
-        @transition(source=States.some_state, target=States.some_other_state)
-        def conditions_check(instance):
-            pass
-
-    def test_source_parameter_can_be_Enum(self):
-        class States(Enum):
-            SOME_STATE = "some_state"
-            SOME_OTHER_STATE = "some_other_state"
-
-        @transition(source=States.SOME_STATE, target=States.SOME_OTHER_STATE)
-        def conditions_check(instance):
-            pass
 
 
 def test_target_parameter_is_tuple():
