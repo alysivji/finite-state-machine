@@ -35,7 +35,7 @@ class TestSourceParameterTypes:
             (bool, True, False),
             (Enum, StateEnum.SOME_STATE, StateEnum.SOME_OTHER_STATE),
             (IntEnum, StateIntEnum.SOME_STATE, StateIntEnum.SOME_OTHER_STATE),
-            (list, ["source_state1", "source_state2"], "target_state")
+            (list, ["source_state1", "source_state2"], "target_state"),
         ],
     )
     def test_source_parameter_valid_types(self, param_type, source_param, target_param):
@@ -43,10 +43,18 @@ class TestSourceParameterTypes:
         def conditions_check(instance):
             pass
 
-    def test_source_parameter_is_not_valid(self):
+    @pytest.mark.parametrize(
+        "source_state,target_state,why_not_valid",
+        [
+            (("source_state1", "source_state2"), "target_state", "Tuple is not valid"),
+        ],
+    )
+    def test_source_parameter_is_not_valid(
+        self, source_state, target_state, why_not_valid
+    ):
         with pytest.raises(ValueError, match="Source can be a"):
 
-            @transition(source=("here",), target="there")
+            @transition(source=source_state, target=target_state)
             def conditions_check(instance):
                 pass
 
