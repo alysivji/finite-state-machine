@@ -1,8 +1,9 @@
 from enum import IntEnum
 
+import pytest
+
 from finite_state_machine import StateMachine, transition
 from finite_state_machine.exceptions import ConditionsNotMet
-import pytest
 
 
 def test_state_machine_requires_state_instance_variable():
@@ -17,22 +18,22 @@ def test_state_machine_requires_state_instance_variable():
         LightSwitch()
 
 
-def test_source_parameter_is_tuple():
-    with pytest.raises(ValueError, match="Source can be a"):
+class TestSourceParameterTypes:
+    def test_source_parameter_is_tuple(self):
+        with pytest.raises(ValueError, match="Source can be a"):
 
-        @transition(source=("here",), target="there")
+            @transition(source=("here",), target="there")
+            def conditions_check(instance):
+                pass
+
+    def test_source_parameter_can_be_IntEnum(self):
+        class States(IntEnum):
+            some_state = 0
+            some_other_state = 1
+
+        @transition(source=States.some_state, target=States.some_other_state)
         def conditions_check(instance):
             pass
-
-
-def test_source_target_parameters_are_int_like():
-    class States(IntEnum):
-        some_state = 0
-        some_other_state = 1
-
-    @transition(source=States.some_state, target=States.some_other_state)
-    def conditions_check(instance):
-        pass
 
 
 def test_target_parameter_is_tuple():
