@@ -28,7 +28,10 @@ def transition(source, target, conditions=None, on_error=None):
     if isinstance(source, allowed_types):
         source = [source]
     if not isinstance(source, list):
-        raise ValueError("Source can be a bool, int, string or list")
+        raise ValueError("Source can be a bool, int, string, Enum, or list")
+    for item in source:
+        if not isinstance(item, allowed_types):
+            raise ValueError("Source can be a bool, int, string, Enum, or list")
 
     if not isinstance(target, allowed_types):
         raise ValueError("Target needs to be a bool, int or string")

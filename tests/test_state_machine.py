@@ -47,6 +47,7 @@ class TestSourceParameterTypes:
         "source_state,target_state,why_not_valid",
         [
             (("source_state1", "source_state2"), "target_state", "Tuple is not valid"),
+            (["source_state1", []], "target_state", "List within list is not valid"),
         ],
     )
     def test_source_parameter_is_not_valid(
