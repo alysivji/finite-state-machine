@@ -1,3 +1,4 @@
+from enum import Enum
 import functools
 import types
 from typing import NamedTuple, Union
@@ -22,7 +23,7 @@ class Transition(NamedTuple):
 
 
 def transition(source, target, conditions=None, on_error=None):
-    allowed_types = (str, bool, int)
+    allowed_types = (str, bool, int, Enum)
 
     if isinstance(source, allowed_types):
         source = [source]

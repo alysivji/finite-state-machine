@@ -1,4 +1,4 @@
-from enum import IntEnum
+from enum import Enum, IntEnum
 
 import pytest
 
@@ -32,6 +32,15 @@ class TestSourceParameterTypes:
             some_other_state = 1
 
         @transition(source=States.some_state, target=States.some_other_state)
+        def conditions_check(instance):
+            pass
+
+    def test_source_parameter_can_be_Enum(self):
+        class States(Enum):
+            SOME_STATE = "some_state"
+            SOME_OTHER_STATE = "some_other_state"
+
+        @transition(source=States.SOME_STATE, target=States.SOME_OTHER_STATE)
         def conditions_check(instance):
             pass
 
