@@ -1,8 +1,9 @@
-from enum import IntEnum
+from enum import Enum, IntEnum
+
+import pytest
 
 from finite_state_machine import StateMachine, transition
 from finite_state_machine.exceptions import ConditionsNotMet
-import pytest
 
 
 def test_state_machine_requires_state_instance_variable():
@@ -17,30 +18,66 @@ def test_state_machine_requires_state_instance_variable():
         LightSwitch()
 
 
-def test_source_parameter_is_tuple():
-    with pytest.raises(ValueError, match="Source can be a"):
+class TestSourceTargetParameterTypes:
+    class StateEnum(Enum):
+        SOME_STATE = "some_state"
+        SOME_OTHER_STATE = "some_other_state"
 
-        @transition(source=("here",), target="there")
+    class StateIntEnum(IntEnum):
+        SOME_STATE = 0
+        SOME_OTHER_STATE = 1
+
+    @pytest.mark.parametrize(
+        "param_type,source_param,target_param",
+        [
+            (str, "source_state", "target_state"),
+            (int, 0, 1),
+            (bool, True, False),
+            (Enum, StateEnum.SOME_STATE, StateEnum.SOME_OTHER_STATE),
+            (IntEnum, StateIntEnum.SOME_STATE, StateIntEnum.SOME_OTHER_STATE),
+            (list, ["source_state1", "source_state2"], "target_state"),
+        ],
+    )
+    def test_source_parameter_valid_types(self, param_type, source_param, target_param):
+        @transition(source=source_param, target=target_param)
         def conditions_check(instance):
             pass
 
+    @pytest.mark.parametrize(
+        "source_state,target_state,why_not_valid",
+        [
+            (("source_state1", "source_state2"), "target_state", "Tuple is not valid"),
+            (["source_state1", []], "target_state", "List within list is not valid"),
+        ],
+    )
+    def test_source_parameter_is_not_valid(
+        self, source_state, target_state, why_not_valid
+    ):
+        with pytest.raises(ValueError, match="Source can be a"):
 
-def test_source_target_parameters_are_int_like():
-    class States(IntEnum):
-        some_state = 0
-        some_other_state = 1
+            @transition(source=source_state, target=target_state)
+            def conditions_check(instance):
+                pass
 
-    @transition(source=States.some_state, target=States.some_other_state)
-    def conditions_check(instance):
-        pass
+    @pytest.mark.parametrize(
+        "source_state,target_state,why_not_valid",
+        [
+            (
+                "source_state",
+                ("target_state1", "target_state2"),
+                "Tuple is not valid",
+            ),
+            ("source_state", ["target_state1", "target_state2"], "List is not valid"),
+        ],
+    )
+    def test_target_parameter_is_not_valid(
+        self, source_state, target_state, why_not_valid
+    ):
+        with pytest.raises(ValueError, match="Target needs to be a"):
 
-
-def test_target_parameter_is_tuple():
-    with pytest.raises(ValueError, match="Target needs to be a"):
-
-        @transition(source="here", target=("there",))
-        def conditions_check(instance):
-            pass
+            @transition(source=source_state, target=target_state)
+            def conditions_check(instance):
+                pass
 
 
 class TestConditionsParameter:
