@@ -1,4 +1,4 @@
-![Finite State Machine Banner](assets/finite-state-machine.png)  
+![Finite State Machine Banner](assets/finite-state-machine.png)
 
 # Finite State Machine
 
@@ -46,6 +46,9 @@ class LightSwitch(StateMachine):
 
 The `transition` decorator can be used to specify valid state transitions
 with an optional parameter for `conditions`.
+States can be of type: `string`, `int`, `bool`, `Enum`, or `IntEnum`.
+Can specify a single sate or a list of states for the `source` parameter;
+can only specify a single sate as the `target` target.
 All condition functions need to return `True` for the transition to occur,
 else a `ConditionsNotMet` exception will be raised.
 Condition functions require the same positional position and
