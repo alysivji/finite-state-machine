@@ -15,3 +15,7 @@ class Turnstile(StateMachine):
     @transition(source="open", target="close")
     async def pass_thru(self):
         return "passed thru"
+
+    @transition(source="close", target="close", on_error="error_state")
+    async def error_function(self):
+        raise ValueError

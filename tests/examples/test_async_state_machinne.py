@@ -38,3 +38,15 @@ async def test_async_turnstile__cannot_pass_thru_closed_turnstile():
         await t.pass_thru()
 
     assert len(caught_warnings) == 0
+
+
+@pytest.mark.asyncio
+async def test_async_turnstile__goes_into_error_state():
+    t = Turnstile()
+    assert t.state == "close"
+
+    with warnings.catch_warnings(record=True) as caught_warnings:
+        await t.error_function()
+
+    assert t.state == "error_state"
+    assert len(caught_warnings) == 0
