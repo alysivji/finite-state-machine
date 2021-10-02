@@ -8,7 +8,7 @@ class Turnstile(StateMachine):
         self.state = self.initial_state
         super().__init__()
 
-    @transition(source=["close", "open"], target="open")
+    @transition(source=["close", "open"], target="open", on_error="error_state")
     async def insert_coin(self):
         return "inserted coin"
 
