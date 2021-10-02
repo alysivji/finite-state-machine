@@ -1,3 +1,4 @@
+import asyncio
 from enum import Enum
 import functools
 import types
@@ -51,43 +52,86 @@ def transition(source, target, conditions=None, on_error=None):
     def transition_decorator(func):
         func.__fsm = Transition(func.__name__, source, target, conditions, on_error)
 
-        @functools.wraps(func)
-        def _wrapper(*args, **kwargs):
-            try:
-                self, rest = args
-            except ValueError:
-                self = args[0]
+        synchronous_execution = not asyncio.iscoroutinefunction(func)
+        if synchronous_execution:
 
-            if self.state not in source:
-                exception_message = (
-                    f"Current state is {self.state}. "
-                    f"{func.__name__} allows transitions from {source}."
-                )
-                raise InvalidStartState(exception_message)
+            @functools.wraps(func)
+            def _wrapper(*args, **kwargs):
+                try:
+                    self, rest = args
+                except ValueError:
+                    self = args[0]
 
-            conditions_not_met = []
-            for condition in conditions:
-                if not condition(*args, **kwargs):
-                    conditions_not_met.append(condition)
-            if conditions_not_met:
-                raise ConditionsNotMet(conditions_not_met)
+                if self.state not in source:
+                    exception_message = (
+                        f"Current state is {self.state}. "
+                        f"{func.__name__} allows transitions from {source}."
+                    )
+                    raise InvalidStartState(exception_message)
 
-            if not on_error:
-                result = func(*args, **kwargs)
-                self.state = target
-                return result
+                conditions_not_met = []
+                for condition in conditions:
+                    if not condition(*args, **kwargs):
+                        conditions_not_met.append(condition)
+                if conditions_not_met:
+                    raise ConditionsNotMet(conditions_not_met)
 
-            try:
-                result = func(*args, **kwargs)
-                self.state = target
-                return result
-            except Exception:
-                # TODO should we log this somewhere?
-                # logger.error? maybe have an optional parameter to set this up
-                # how to libraries log?
-                self.state = on_error
-                return
+                if not on_error:
+                    result = func(*args, **kwargs)
+                    self.state = target
+                    return result
 
-        return _wrapper
+                try:
+                    result = func(*args, **kwargs)
+                    self.state = target
+                    return result
+                except Exception:
+                    # TODO should we log this somewhere?
+                    # logger.error? maybe have an optional parameter to set this up
+                    # how to libraries log?
+                    self.state = on_error
+                    return
+
+            return _wrapper
+        else:
+
+            @functools.wraps(func)
+            async def _wrapper(*args, **kwargs):
+                try:
+                    self, rest = args
+                except ValueError:
+                    self = args[0]
+
+                if self.state not in source:
+                    exception_message = (
+                        f"Current state is {self.state}. "
+                        f"{func.__name__} allows transitions from {source}."
+                    )
+                    raise InvalidStartState(exception_message)
+
+                conditions_not_met = []
+                for condition in conditions:
+                    if not condition(*args, **kwargs):
+                        conditions_not_met.append(condition)
+                if conditions_not_met:
+                    raise ConditionsNotMet(conditions_not_met)
+
+                if not on_error:
+                    result = await func(*args, **kwargs)
+                    self.state = target
+                    return result
+
+                try:
+                    result = await func(*args, **kwargs)
+                    self.state = target
+                    return result
+                except Exception:
+                    # TODO should we log this somewhere?
+                    # logger.error? maybe have an optional parameter to set this up
+                    # how to libraries log?
+                    self.state = on_error
+                    return
+
+            return _wrapper
 
     return transition_decorator
