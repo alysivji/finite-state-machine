@@ -68,7 +68,7 @@ class transition:
         self.__class__._fsm_transition_mapping[func.__qualname__] = func
 
         @functools.wraps(func)
-        def callable(*args, **kwargs):
+        def sync_callable(*args, **kwargs):
             try:
                 state_machine, rest = args
             except ValueError:
@@ -148,4 +148,4 @@ class transition:
         if asyncio.iscoroutinefunction(func):
             return async_callable
         else:
-            return callable
+            return sync_callable
