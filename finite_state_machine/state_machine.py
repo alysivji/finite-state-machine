@@ -57,7 +57,7 @@ class transition:
         self.on_error = on_error
 
     def __call__(self, func):
-        func.__fsm = Transition(
+        func._fsm = Transition(
             func.__name__,
             self.source,
             self.target,

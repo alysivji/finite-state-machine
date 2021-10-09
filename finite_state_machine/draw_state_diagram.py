@@ -29,7 +29,7 @@ def generate_state_diagram_markdown(cls, initial_state):
 
     class_fns = inspect.getmembers(cls, predicate=inspect.isfunction)
     state_transitions: List[Transition] = [
-        func.__fsm for name, func in class_fns if hasattr(func, "__fsm")
+        func._fsm for name, func in class_fns if hasattr(func, "_fsm")
     ]
 
     transition_template = "    {source} --> {target} : {name}\n"
