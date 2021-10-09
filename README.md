@@ -141,7 +141,7 @@ This library supports asynchronous state machines
 through the use of async `@transition` decorator and async condition functions.
 
 See the following matrix on how synchronous and asynchronous functions
-can be combined to build state machines that are evaluated as expected.
+can be combined to build state machines:
 
 ||Sync `@transition` decorator|Async `@transition` decorator|
 |---|:---:|:---:|
