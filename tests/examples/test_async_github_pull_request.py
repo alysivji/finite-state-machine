@@ -2,6 +2,7 @@ from collections import namedtuple
 
 import pytest
 
+from finite_state_machine.exceptions import ConditionsNotMet
 from examples.async_github_pull_request import GitHubPullRequest
 
 User = namedtuple("User", "name github_id is_admin")
@@ -35,6 +36,18 @@ async def test_approved_pr_can_be_merged__fully_async():
 
     # Assert
     assert github_pr.state == "merged"
+
+
+@pytest.mark.asyncio
+async def test_pr_with_no_approvals_cannot_be_merged():
+    # Arrange
+    github_pr = GitHubPullRequest()
+    assert github_pr.state == "opened"
+    user = User(name="Aly Sivji", github_id="alysivji", is_admin=False)
+
+    # Act
+    with pytest.raises(ConditionsNotMet):
+        await github_pr.fully_async_merge_pull_request(user)
 
 
 @pytest.mark.asyncio
