@@ -24,9 +24,6 @@ class Transition(NamedTuple):
 
 
 class transition:
-    # TODO remove from part 1 PR
-    _fsm_transition_mapping = {}
-
     def __init__(self, source, target, conditions=None, on_error=None):
         allowed_types = (str, bool, int, Enum)
 
@@ -65,8 +62,6 @@ class transition:
             self.conditions,
             self.on_error,
         )
-        # TODO update on class transition mapping
-        self.__class__._fsm_transition_mapping[func.__qualname__] = func
 
         @functools.wraps(func)
         def sync_callable(*args, **kwargs):
