@@ -58,13 +58,18 @@ keyword arguments present in the transition function.
 ```python
     @transition(source="off", target="on", conditions=[light_is_off])
     def turn_on(self):
-        # specify side effects
+        # transition function
+        # logic to define what happens to "complete a transition"
+        # ex. update database record,
+        ...
 
 def light_is_off(machine):
+    # condition function, first param will always be the state machine class
+    # return a boolean to specify if a transition is valid
     return machine.state == "off"
 ```
 
-Can also specify an `on_error` parameter to handle situations
+Can also specify an `on_error` state to handle situations
 where the transition function raises an exception:
 
 ```python
@@ -142,10 +147,10 @@ through the use of `@transition` decorators
 that support both sync / async transition functions
 and sync / async condition functions.
 
-See the following matrix on how synchronous and asynchronous functions
-can be combined to build state machines:
+The following matrix defines the supported function types
+by the `@transition` decorator:
 
-||Synchronous `@transition` decorator|Asynchronous `@transition` decorator|
+||Synchronous transition function|Asynchronous transition function|
 |---|:---:|:---:|
 |Synchronous condition function|✅|❌|
 |Asynchronous condition function|✅|✅|
@@ -162,7 +167,7 @@ which can be viewed using the
 
 Use the `fsm_draw_state_diagram` command and point to
 State Machine workflow class
-that inheritences from `StateMachine`.
+that inherits from `StateMachine`.
 
 ```console
 # class parameter is required
