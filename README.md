@@ -149,8 +149,8 @@ and condition functions as follows:
 
 ||Synchronous transition function|Asynchronous transition function|
 |---|:---:|:---:|
-|Synchronous condition function|✅|❌|
-|Asynchronous condition function|✅|✅|
+|**Synchronous condition function**|✅|❌|
+|**Asynchronous condition function**|✅|✅|
 
 ## State Diagram
 
