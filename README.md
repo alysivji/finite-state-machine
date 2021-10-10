@@ -142,13 +142,10 @@ The [examples](/examples) folder contains additional workflows.
 
 ## Asynchronous Support
 
-This library enables asynchronous state machines
-through the use of `@transition` decorators
-that support both sync / async transition functions
-and sync / async condition functions.
-
-The following matrix defines the supported function types
-by the `@transition` decorator:
+`finite-state-machine` can be used to build
+both synchronous and asynchronous State Machines.
+The `@transition` decorator supports transition functions
+and condition functions as follows:
 
 ||Synchronous transition function|Asynchronous transition function|
 |---|:---:|:---:|
