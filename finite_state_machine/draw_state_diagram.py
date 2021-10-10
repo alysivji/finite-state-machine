@@ -26,7 +26,6 @@ def generate_state_diagram_markdown(cls, initial_state):
 
     https://mermaid-js.github.io/mermaid/diagrams-and-syntax-and-examples/stateDiagram.html
     """
-
     class_fns = inspect.getmembers(cls, predicate=inspect.isfunction)
     state_transitions: List[Transition] = [
         func.__fsm for name, func in class_fns if hasattr(func, "__fsm")
