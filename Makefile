@@ -8,7 +8,7 @@ install-localdev:  ## install library for local development; pip install -e .
 	flit install --symlink
 
 test: ## run tests
-	pytest
+	pytest $(args)
 
 test-cov: ## run tests with coverage
 	pytest --cov finite_state_machine/ --cov examples/
