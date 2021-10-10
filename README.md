@@ -137,7 +137,7 @@ The [examples](/examples) folder contains additional workflows.
 
 ## Asynchronous Support
 
-This library supports asynchronous state machines
+This library enables asynchronous state machines
 through the use of `@transition` decorators
 that support both sync / async transition functions
 and sync / async condition functions.
