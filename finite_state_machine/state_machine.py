@@ -15,7 +15,7 @@ class StateMachine:
             raise ValueError("Need to set a state instance variable")
 
 
-class Transition(NamedTuple):
+class TransitionDetails(NamedTuple):
     name: str
     source: Union[list, bool, int, str]
     target: Union[bool, int, str]
@@ -55,7 +55,7 @@ class transition:
         self.on_error = on_error
 
     def __call__(self, func):
-        func._fsm = Transition(
+        func._fsm = TransitionDetails(
             func.__name__,
             self.source,
             self.target,
