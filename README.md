@@ -19,7 +19,7 @@ Lightweight, decorator-based Python implementation of a [Finite State Machine](h
 - [Installation](#installation)
 - [Usage](#usage)
 - [Example](#example)
-- [Async Support](#async-support)
+- [Asynchronous Support](#asynchronous-support)
 - [State Diagram](#state-diagram)
 - [Contributing](#contributing)
 - [Inspiration](#inspiration)
@@ -135,18 +135,20 @@ InvalidStartState:
 
 The [examples](/examples) folder contains additional workflows.
 
-## Async Support
+## Asynchronous Support
 
 This library supports asynchronous state machines
-through the use of async `@transition` decorator and async condition functions.
+through the use of `@transition` decorators
+that support both sync / async transition functions
+and sync / async condition functions.
 
 See the following matrix on how synchronous and asynchronous functions
 can be combined to build state machines:
 
-||Sync `@transition` decorator|Async `@transition` decorator|
+||Synchronous `@transition` decorator|Asynchronous `@transition` decorator|
 |---|:---:|:---:|
-|Sync condition function|✅|❌|
-|Async condition function|✅|✅|
+|Synchronous condition function|✅|❌|
+|Asynchronous condition function|✅|✅|
 
 ## State Diagram
 
