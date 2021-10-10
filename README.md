@@ -19,7 +19,7 @@ Lightweight, decorator-based Python implementation of a [Finite State Machine](h
 - [Installation](#installation)
 - [Usage](#usage)
 - [Example](#example)
-- [Async Support](#async-support)
+- [Asynchronous Support](#asynchronous-support)
 - [State Diagram](#state-diagram)
 - [Contributing](#contributing)
 - [Inspiration](#inspiration)
@@ -58,13 +58,18 @@ keyword arguments present in the transition function.
 ```python
     @transition(source="off", target="on", conditions=[light_is_off])
     def turn_on(self):
-        # specify side effects
+        # transition function
+        # logic to define what happens to "complete a transition"
+        # ex. update database record,
+        ...
 
 def light_is_off(machine):
+    # condition function, first param will always be the state machine class
+    # return a boolean to specify if a transition is valid
     return machine.state == "off"
 ```
 
-Can also specify an `on_error` parameter to handle situations
+Can also specify an `on_error` state to handle situations
 where the transition function raises an exception:
 
 ```python
@@ -135,18 +140,17 @@ InvalidStartState:
 
 The [examples](/examples) folder contains additional workflows.
 
-## Async Support
+## Asynchronous Support
 
-This library supports asynchronous state machines
-through the use of async `@transition` decorator and async condition functions.
+`finite-state-machine` can be used to build
+both synchronous and asynchronous State Machines.
+The `@transition` decorator supports transition functions
+and condition functions as follows:
 
-See the following matrix on how synchronous and asynchronous functions
-can be combined to build state machines:
-
-||Sync `@transition` decorator|Async `@transition` decorator|
+||Synchronous transition function|Asynchronous transition function|
 |---|:---:|:---:|
-|Sync condition function|✅|❌|
-|Async condition function|✅|✅|
+|**Synchronous condition function**|✅|❌|
+|**Asynchronous condition function**|✅|✅|
 
 ## State Diagram
 
@@ -160,7 +164,7 @@ which can be viewed using the
 
 Use the `fsm_draw_state_diagram` command and point to
 State Machine workflow class
-that inheritences from `StateMachine`.
+that inherits from `StateMachine`.
 
 ```console
 # class parameter is required
