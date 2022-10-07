@@ -14,6 +14,13 @@ class StateMachine:
         except AttributeError:
             raise ValueError("Need to set a state instance variable")
 
+    def _update_state(self, state):
+        self.on_state_change(self.state, state)
+        self.state = state
+
+    def on_state_change(self, source, target):
+        pass
+
 
 class TransitionDetails(NamedTuple):
     name: str
@@ -86,18 +93,18 @@ class transition:
 
             if not self.on_error:
                 result = func(*args, **kwargs)
-                state_machine.state = self.target
+                state_machine._update_state(self.target)
                 return result
 
             try:
                 result = func(*args, **kwargs)
-                state_machine.state = self.target
+                state_machine._update_state(self.target)
                 return result
             except Exception:
                 # TODO should we log this somewhere?
                 # logger.error? maybe have an optional parameter to set this up
                 # how to libraries log?
-                state_machine.state = self.on_error
+                state_machine._update_state(self.on_error)
                 return
 
         @functools.wraps(func)
@@ -127,18 +134,18 @@ class transition:
 
             if not self.on_error:
                 result = await func(*args, **kwargs)
-                state_machine.state = self.target
+                state_machine._update_state(self.target)
                 return result
 
             try:
                 result = await func(*args, **kwargs)
-                state_machine.state = self.target
+                state_machine._update_state(self.target)
                 return result
             except Exception:
                 # TODO should we log this somewhere?
                 # logger.error? maybe have an optional parameter to set this up
                 # how to libraries log?
-                state_machine.state = self.on_error
+                state_machine._update_state(self.on_error)
                 return
 
         if asyncio.iscoroutinefunction(func):
